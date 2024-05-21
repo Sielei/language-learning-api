@@ -26,7 +26,7 @@ class JwtUtil {
     public String generateJWTToken(DTO.User user){
         return Jwts.builder()
                 .issuedAt(Date.from(ZonedDateTime.now().toInstant()))
-                .issuer("Event-io")
+                .issuer("Language API")
                 .claim("userId", user.id())
                 .claim("username", user.email())
                 .expiration(Date.from(ZonedDateTime.now().plusMinutes(configData.getJwtExpiryDurationInMinutes()).toInstant()))
