@@ -20,5 +20,5 @@ public class PasswordReset {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     private Date expiry;
-    private boolean used;
+    private boolean isUsed;
 }
