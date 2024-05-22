@@ -10,5 +10,5 @@ import org.springframework.context.annotation.Configuration;
 public class ApplicationConfigData {
     private String jwtSecret;
     private Long jwtExpiryDurationInMinutes;
-    private Long passwordResetTokenExpiryDurationInMinutes;
+    private Long passwordResetTokenExpiryDurationInDays;
 }
