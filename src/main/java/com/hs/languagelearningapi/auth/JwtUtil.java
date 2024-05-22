@@ -23,7 +23,7 @@ class JwtUtil {
         this.secretKey = Keys.hmacShaKeyFor(configData.getJwtSecret().getBytes());
     }
 
-    public String generateJWTToken(DTO.User user){
+    public String generateJWTToken(DTO.UserDto user){
         return Jwts.builder()
                 .issuedAt(Date.from(ZonedDateTime.now().toInstant()))
                 .issuer("Language API")
