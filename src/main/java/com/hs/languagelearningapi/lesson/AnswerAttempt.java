@@ -19,5 +19,6 @@ public class AnswerAttempt {
     @JoinColumn(name = "exercise_id", nullable = false)
     private Exercise exercise;
     private String userAnswer;
+    private Integer marksAwarded;
     private DTO.AttemptStatus status;
 }
