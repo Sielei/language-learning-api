@@ -3,6 +3,7 @@ package com.hs.languagelearningapi.auth;
 import com.hs.languagelearningapi.common.DTO;
 import com.hs.languagelearningapi.user.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -44,7 +45,7 @@ class AuthController {
         return authenticationService.login(loginRequest, request);
     }
 
-    @Operation(summary = "Update user Password")
+    @Operation(summary = "Update user Password", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping("/password")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void updateUserPassword(@RequestAttribute("userId") UUID userId,
