@@ -2,9 +2,11 @@ package com.hs.languagelearningapi.lesson;
 
 import com.hs.languagelearningapi.common.DTO;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -20,7 +22,8 @@ class LessonController {
         this.lessonService = lessonService;
     }
 
-    @Operation(summary = "Create a Language lesson")
+    @Operation(summary = "Create a Language lesson", security = @SecurityRequirement(name = "bearerAuth"))
+    @PreAuthorize("hasAuthority('TUTOR')")
     @PostMapping
     ResponseEntity<DTO.LessonResponse> createLanguageLesson(@RequestBody DTO.LessonRequest lessonRequest){
         var lesson = lessonService.createLanguageLesson(lessonRequest);
@@ -31,13 +34,15 @@ class LessonController {
         return ResponseEntity.created(location).body(lesson);
     }
 
-    @Operation(summary = "Find Language lesson by Id")
+    @Operation(summary = "Find Language lesson by Id", security = @SecurityRequirement(name = "bearerAuth"))
+    @PreAuthorize("hasAuthority('TUTOR')")
     @GetMapping("/{lessonId}")
     DTO.LessonResponse findLanguageLessonById(@PathVariable("lessonId") UUID lessonId){
         return lessonService.findLanguageLessonById(lessonId);
     }
 
-    @Operation(summary = "Find all language lessons")
+    @Operation(summary = "Find all language lessons", security = @SecurityRequirement(name = "bearerAuth"))
+    @PreAuthorize("hasAuthority('TUTOR')")
     @GetMapping
     DTO.PagedCollection<DTO.LessonResponse> findAllLanguageLessons(
             @RequestParam(name = "language", defaultValue = "All") String language,
@@ -46,7 +51,8 @@ class LessonController {
         return lessonService.findAllLanguageLessons(language, page, pageSize);
     }
 
-    @Operation(summary = "Update language lesson")
+    @Operation(summary = "Update language lesson", security = @SecurityRequirement(name = "bearerAuth"))
+    @PreAuthorize("hasAuthority('TUTOR')")
     @PutMapping("/{lessonId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void updateLanguageLesson(@PathVariable("lessonId") UUID lessonId,
@@ -54,14 +60,16 @@ class LessonController {
         lessonService.updateLanguageLesson(lessonId, lessonRequest);
     }
 
-    @Operation(summary = "Delete language lesson")
+    @Operation(summary = "Delete language lesson", security = @SecurityRequirement(name = "bearerAuth"))
+    @PreAuthorize("hasAuthority('TUTOR')")
     @DeleteMapping("/{lessonId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteLanguageLesson(@PathVariable("lessonId") UUID lessonId){
         lessonService.deleteLanguageLesson(lessonId);
     }
 
-    @Operation(summary = "Create lesson exercise")
+    @Operation(summary = "Create lesson exercise", security = @SecurityRequirement(name = "bearerAuth"))
+    @PreAuthorize("hasAuthority('TUTOR')")
     @PostMapping("/{lessonId}/exercises")
     ResponseEntity<DTO.CreateExerciseResponse> createLessonExercise(
             @PathVariable("lessonId") UUID lessonId,
@@ -74,14 +82,16 @@ class LessonController {
         return ResponseEntity.created(location).body(exercise);
     }
 
-    @Operation(summary = "Find lesson exercise by Id")
+    @Operation(summary = "Find lesson exercise by Id", security = @SecurityRequirement(name = "bearerAuth"))
+    @PreAuthorize("hasAuthority('TUTOR')")
     @GetMapping("/{lessonId}/exercises/{exerciseId}")
     DTO.ExerciseResponse findLessonExerciseById(@PathVariable("lessonId") UUID lessonId,
                                                       @PathVariable("exerciseId") UUID exerciseId){
         return lessonService.findLessonExerciseById(lessonId, exerciseId);
     }
 
-    @Operation(summary = "Find all lesson exercises")
+    @Operation(summary = "Find all lesson exercises", security = @SecurityRequirement(name = "bearerAuth"))
+    @PreAuthorize("hasAuthority('TUTOR')")
     @GetMapping("/{lessonId}/exercises")
     DTO.PagedCollection<DTO.ExerciseResponse> findAllLessonExercises(
             @PathVariable("lessonId") UUID lessonId,
@@ -90,7 +100,8 @@ class LessonController {
         return lessonService.findAllLessonExercises(lessonId, page, pageSize);
     }
 
-    @Operation(summary = "Update lesson exercise")
+    @Operation(summary = "Update lesson exercise", security = @SecurityRequirement(name = "bearerAuth"))
+    @PreAuthorize("hasAuthority('TUTOR')")
     @PutMapping("/{lessonId}/exercises/{exerciseId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void updateLessonExercise(@PathVariable("lessonId") UUID lessonId,
@@ -100,7 +111,8 @@ class LessonController {
 
     }
 
-    @Operation(summary = "Delete lesson exercise")
+    @Operation(summary = "Delete lesson exercise", security = @SecurityRequirement(name = "bearerAuth"))
+    @PreAuthorize("hasAuthority('TUTOR')")
     @DeleteMapping("/{lessonId}/exercises/{exerciseId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteLessonExercise(@PathVariable("lessonId") UUID lessonId,
