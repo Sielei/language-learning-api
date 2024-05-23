@@ -60,4 +60,51 @@ class LessonController {
     void deleteLanguageLesson(@PathVariable("lessonId") UUID lessonId){
         lessonService.deleteLanguageLesson(lessonId);
     }
+
+    @Operation(summary = "Create lesson exercise")
+    @PostMapping("/{lessonId}/exercises")
+    ResponseEntity<DTO.CreateExerciseResponse> createLessonExercise(
+            @PathVariable("lessonId") UUID lessonId,
+            @RequestBody DTO.ExerciseRequest exerciseRequest){
+        var exercise = lessonService.createLessonExercise(lessonId, exerciseRequest);
+        var location = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{exerciseId}")
+                .buildAndExpand(exercise.id())
+                .toUri();
+        return ResponseEntity.created(location).body(exercise);
+    }
+
+    @Operation(summary = "Find lesson exercise by Id")
+    @GetMapping("/{lessonId}/exercises/{exerciseId}")
+    DTO.ExerciseResponse findLessonExerciseById(@PathVariable("lessonId") UUID lessonId,
+                                                      @PathVariable("exerciseId") UUID exerciseId){
+        return lessonService.findLessonExerciseById(lessonId, exerciseId);
+    }
+
+    @Operation(summary = "Find all lesson exercises")
+    @GetMapping("/{lessonId}/exercises")
+    DTO.PagedCollection<DTO.ExerciseResponse> findAllLessonExercises(
+            @PathVariable("lessonId") UUID lessonId,
+            @RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "pageSize", defaultValue = "10") int pageSize){
+        return lessonService.findAllLessonExercises(lessonId, page, pageSize);
+    }
+
+    @Operation(summary = "Update lesson exercise")
+    @PutMapping("/{lessonId}/exercises/{exerciseId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void updateLessonExercise(@PathVariable("lessonId") UUID lessonId,
+                              @PathVariable("exerciseId") UUID exerciseId,
+                              @RequestBody DTO.ExerciseRequest exerciseRequest){
+        lessonService.updateLessonExercise(lessonId, exerciseId, exerciseRequest);
+
+    }
+
+    @Operation(summary = "Delete lesson exercise")
+    @DeleteMapping("/{lessonId}/exercises/{exerciseId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void deleteLessonExercise(@PathVariable("lessonId") UUID lessonId,
+                              @PathVariable("exerciseId") UUID exerciseId){
+        lessonService.deleteLessonExercise(lessonId, exerciseId);
+    }
 }
