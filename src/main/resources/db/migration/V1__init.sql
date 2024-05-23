@@ -73,11 +73,39 @@ create table if not exists exercise_answers (
     answer_text varchar(255)
 );
 
+create table if not exists answer_attempts (
+    id uuid not null primary key,
+    user_id uuid not null,
+    exercise_id uuid not null,
+    user_answer varchar (255) not null,
+    status varchar (100) not null,
+    constraint user_id_fk_attempts foreign key (user_id)
+        references users (id)
+        on update no action
+        on delete no action,
+    constraint exercise_id_fk_attempts foreign key (exercise_id)
+        references exercises (id)
+        on update no action
+        on delete no action,
+    constraint status_check check ( status ::text = any ( array ['PASSED' :: character varying, 'FAILED' :: character varying] :: text []))
+);
+
 create table if not exists user_progress (
     id uuid not null primary key,
     user_id uuid not null,
     lesson_id uuid not null,
-    exercises_completed integer not null,
-    exercises_passed uuid []
+    attempted_exercise integer default 0,
+    pending_exercises integer default 0,
+    failed_exercises integer default 0,
+    score integer default 0,
+    total_score integer default 0,
+    constraint user_id_fk_progress foreign key (user_id)
+        references users(id)
+        on update no action
+        on delete no action,
+    constraint lesson_id_fk_progress foreign key (lesson_id)
+        references lessons(id)
+        on update no action
+        on delete no action
 );
 
