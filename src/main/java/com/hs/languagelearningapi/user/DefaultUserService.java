@@ -117,8 +117,8 @@ class DefaultUserService implements UserService{
     public void updateUserDetails(UUID userId, DTO.UpdateUserRequest updateUserRequest) {
         var userToUpdate = userRepository.findUserById(userId);
         userToUpdate.setFirstName(updateUserRequest.firstName());
-        userToUpdate.setLastName(userToUpdate.getLastName());
-        userToUpdate.setEmail(userToUpdate.getEmail());
+        userToUpdate.setLastName(updateUserRequest.lastName());
+        userToUpdate.setEmail(updateUserRequest.email());
         userRepository.save(userToUpdate);
     }
 
