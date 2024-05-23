@@ -16,6 +16,7 @@ class Lesson {
     private UUID id;
     private String name;
     private String description;
+    private Integer percentagePassMark;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "language_id", nullable = false)
     private Language language;
