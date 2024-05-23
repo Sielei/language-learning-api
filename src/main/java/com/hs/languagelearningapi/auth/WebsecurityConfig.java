@@ -37,6 +37,8 @@ class WebsecurityConfig {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/auth/password")
+                        .authenticated())
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/auth/**", "/api/v1/errors/**",
                                 "/swagger-ui/*", "/v3/api-docs/swagger-config", "/v3/api-docs",
                                 "/redoc", "/favicon.ico")
