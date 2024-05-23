@@ -70,4 +70,10 @@ class AuthController {
         return new DTO.GetResetTokenResponse("Ok",
                 "Password reset successfully! Proceed to login page to login with your new password!");
     }
+
+    @Operation(summary = "Get refresh token", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/refresh-token")
+    DTO.RefreshToken getRefreshToken(@RequestAttribute("userId") UUID userId){
+        return authenticationService.getRefreshToken(userId);
+    }
 }
