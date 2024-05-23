@@ -28,6 +28,7 @@ create table if not exists supported_languages (
 create table if not exists lessons (
     id uuid not null primary key,
     language_id uuid not null,
+    index integer not null,
     language_proficiency varchar(100),
     name varchar (255) not null,
     description text,
@@ -94,10 +95,10 @@ create table if not exists user_progress (
     id uuid not null primary key,
     user_id uuid not null,
     lesson_id uuid not null,
-    attempted_exercise integer default 0,
+    attempted_exercises integer default 0,
     pending_exercises integer default 0,
     failed_exercises integer default 0,
-    score integer default 0,
+    user_score integer default 0,
     total_score integer default 0,
     constraint user_id_fk_progress foreign key (user_id)
         references users(id)

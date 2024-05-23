@@ -15,6 +15,7 @@ class Lesson {
     @Column(name = "id", nullable = false)
     private UUID id;
     private String name;
+    private Integer index;
     private String description;
     private Integer percentagePassMark;
     @ManyToOne(fetch = FetchType.LAZY)
