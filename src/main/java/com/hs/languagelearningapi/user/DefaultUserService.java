@@ -104,6 +104,24 @@ class DefaultUserService implements UserService{
         userRepository.save(user);
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public DTO.RegisterUserResponse findById(UUID userId) {
+        var userDto = findUserById(userId);
+        return new DTO.RegisterUserResponse(userDto.id(), userDto.firstName() + " " +
+                userDto.lastName(), userDto.email());
+    }
+
+    @Transactional
+    @Override
+    public void updateUserDetails(UUID userId, DTO.UpdateUserRequest updateUserRequest) {
+        var userToUpdate = userRepository.findUserById(userId);
+        userToUpdate.setFirstName(updateUserRequest.firstName());
+        userToUpdate.setLastName(userToUpdate.getLastName());
+        userToUpdate.setEmail(userToUpdate.getEmail());
+        userRepository.save(userToUpdate);
+    }
+
     private DTO.UserDto mapUserToRegisterUserDto(User user) {
         return new DTO.UserDto(user.getId(), user.getFirstName(), user.getLastName(),
                 user.getEmail(), user.getPassword(), user.getRole());
