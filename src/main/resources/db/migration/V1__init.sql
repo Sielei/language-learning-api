@@ -31,6 +31,7 @@ create table if not exists lessons (
     language_proficiency varchar(100),
     name varchar (255) not null,
     description text,
+    percentage_pass_mark integer not null,
     constraint language_id_fk foreign key (language_id)
         references supported_languages (id)
         on update no action
@@ -41,13 +42,35 @@ create table if not exists lessons (
 create table if not exists exercises (
     id uuid not null primary key,
     lesson_id uuid not null,
+    index integer not null,
     task text not null,
-    options text [],
-    answers text[],
+    task_score integer not null,
+    task_type varchar(100) not null,
     constraint lesson_id_fk foreign key (lesson_id)
         references lessons (id)
         on update no action
+        on delete cascade,
+    constraint task_type_check check ( task_type:: text = any (array ['MULTIPLE_CHOICE_SINGLE_ANSWER' :: character varying, 'MULTIPLE_CHOICE_MULTIPLE_ANSWERS' :: character varying, 'TRUE_OR_FALSE' :: character varying, 'SHORT_ANSWER' :: character varying, 'MATCHING' :: character varying] :: text []))
+);
+
+create table if not exists multiple_choices (
+    id uuid not null primary key,
+    exercise_id uuid not null,
+    index integer not null,
+    is_matching_choice boolean default false,
+    is_left_choice boolean,
+    choice varchar(255) not null,
+    constraint exercise_id_fk foreign key (exercise_id)
+        references exercises (id)
+        on update no action
         on delete cascade
+);
+
+create table if not exists exercise_answers (
+    id uuid not null primary key,
+    exercise_id uuid not null,
+    multiple_choice_id uuid,
+    answer_text varchar(255)
 );
 
 create table if not exists user_progress (
