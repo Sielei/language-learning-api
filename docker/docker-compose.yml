@@ -3,9 +3,17 @@ version: "3.8"
 services:
   postgres:
     image: 'postgres:15.6'
+    container_name: postgres
     environment:
       - 'POSTGRES_DB=mydatabase'
       - 'POSTGRES_PASSWORD=secret'
       - 'POSTGRES_USER=myuser'
     ports:
       - '5434:5432'
+
+  language-api:
+    image: 'language-learning-api:0.0.1'
+    depends_on:
+      - postgres
+    ports:
+      - '8088:8088'
