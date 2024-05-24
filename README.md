@@ -13,8 +13,15 @@
 
 [Apache Maven 3.9.4+ ](https://maven.apache.org/download.cgi)
 
+[Docker desktop](https://www.docker.com/get-started/)
+
 ## Running Locally
 
+Run tests `mvn clean test`
+
+Build docker image `mvn clean install -DskipTests`
+
+cd docker `docker-compose up`
 
 ## Application Overview
 
@@ -46,3 +53,17 @@ The system has 9 entities namely:
 ## Using the system
 
 Once the system is up and running, navigate to [Swagger UI](http://localhost:8088/swagger-ui/index.html#/)
+![Swagger UI](/docs/swagger1.png)
+From the swagger UI its clear that the system has 4 main collections
+  * Authentication
+  * Users
+  * Languages
+  * Lessons
+
+The Authentication collection provides endpoints for User Registration, Password reset, and login which can be used by unauthenticated users.
+Update password and get Jwt refresh token endpoints require authentication to use them.
+
+![Authentication](/docs/auth.png)
+
+ The system also supports [Redoc](http://localhost:8088/redoc) for API documentation
+![Redoc UI](/docs/redoc.png)
