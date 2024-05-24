@@ -13,7 +13,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.UUID;
 
-@Tag(name = "Supported Languages", description = "API to manage languages that learners can learn")
+@Tag(name = "Languages", description = "API to manage languages that learners can learn")
 @RestController
 @RequestMapping("/api/v1/languages")
 class LanguageController {
@@ -27,7 +27,7 @@ class LanguageController {
     @PreAuthorize("hasAuthority('TUTOR')")
     @PostMapping
     ResponseEntity<DTO.LanguageResponse> addSupportedLanguage(@RequestBody @Valid DTO.LanguageRequest languageRequest){
-        var supportedLanguage = lessonService.addSuportedLanguage(languageRequest);
+        var supportedLanguage = lessonService.addSupportedLanguage(languageRequest);
         var location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{languageId}")
                 .buildAndExpand(supportedLanguage.id())
@@ -43,6 +43,7 @@ class LanguageController {
     }
 
     @Operation(summary = "Find all supported languages", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping
     DTO.PagedCollection<DTO.LanguageResponse> findAllSupportedLanguages(
             @RequestParam(name = "page", defaultValue = "1") int page,
             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize){
@@ -52,10 +53,9 @@ class LanguageController {
     @Operation(summary = "Update supported language", security = @SecurityRequirement(name = "bearerAuth"))
     @PreAuthorize("hasAuthority('TUTOR')")
     @PutMapping("/{languageId}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    void updateSupportedLanguage(@PathVariable("languageId") UUID languageId,
-                                 @RequestBody DTO.LanguageRequest languageRequest){
-        lessonService.updateSupportedLanguage(languageId, languageRequest);
+    DTO.LanguageResponse updateSupportedLanguage(@PathVariable("languageId") UUID languageId,
+                                                 @RequestBody DTO.LanguageRequest languageRequest){
+        return lessonService.updateSupportedLanguage(languageId, languageRequest);
     }
 
     @Operation(summary = "Delete supported language", security = @SecurityRequirement(name = "bearerAuth"))
@@ -64,6 +64,14 @@ class LanguageController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void deleteSupportedLanguage(@PathVariable("languageId") UUID languageId){
         lessonService.deleteSupportedLanguage(languageId);
+    }
+
+    @Operation(summary = "Start learning a new language", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/{languageId}/start")
+    DTO.LessonResponse startLearning(@PathVariable("languageId") UUID languageId,
+                                     @RequestParam("proficiency")DTO.LanguageProficiency proficiency,
+                                     @RequestAttribute("userId") UUID userId){
+        return lessonService.findLessonByLanguageProficiencyAndPriority(userId,languageId, proficiency);
     }
 
 }

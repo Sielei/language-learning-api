@@ -20,5 +20,6 @@ public class AnswerAttempt {
     private Exercise exercise;
     private String userAnswer;
     private Integer marksAwarded;
+    @Enumerated(EnumType.STRING)
     private DTO.AttemptStatus status;
 }

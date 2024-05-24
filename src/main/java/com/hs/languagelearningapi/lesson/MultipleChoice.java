@@ -20,6 +20,5 @@ public class MultipleChoice {
     private Integer index;
     @Column(columnDefinition = "boolean default false")
     private Boolean isMatchingChoice;
-    private Boolean isLeftChoice;
     private String choice;
 }

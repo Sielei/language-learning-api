@@ -66,6 +66,7 @@ public class DTO {
     public enum AttemptStatus {
         PASSED, FAILED, PARTIAL_FAIL
     }
-    public record ResponseFeedback(String status, Integer score){}
+    public record ResponseFeedback(String status, Integer score, Integer completedExercises,
+                                   Integer pendingExercises, Integer totalScore){}
 
 }

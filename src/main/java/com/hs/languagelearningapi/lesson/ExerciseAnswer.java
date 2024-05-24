@@ -19,6 +19,7 @@ public class ExerciseAnswer {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "multiple_choice_id", nullable = true)
     private MultipleChoice multipleChoice;
+    @Column(columnDefinition = "TEXT")
     private String answerText;
 
 }

@@ -12,7 +12,7 @@ create table if not exists password_resets (
     id uuid not null primary key,
     user_id uuid not null,
     token text not null,
-    token_expiry timestamp not null,
+    expiry timestamp not null,
     is_used boolean not null default false,
     constraint user_id_fk foreign key (user_id)
         references users(id)
@@ -51,7 +51,7 @@ create table if not exists exercises (
         references lessons (id)
         on update no action
         on delete cascade,
-    constraint task_type_check check ( task_type:: text = any (array ['MULTIPLE_CHOICE_SINGLE_ANSWER' :: character varying, 'MULTIPLE_CHOICE_MULTIPLE_ANSWERS' :: character varying, 'TRUE_OR_FALSE' :: character varying, 'SHORT_ANSWER' :: character varying, 'MATCHING' :: character varying] :: text []))
+    constraint task_type_check check ( task_type:: text = any (array ['MULTIPLE_CHOICE_SINGLE_ANSWER' :: character varying, 'MULTIPLE_CHOICE_MULTIPLE_ANSWERS' :: character varying, 'SHORT_ANSWER' :: character varying, 'MATCHING' :: character varying] :: text []))
 );
 
 create table if not exists multiple_choices (
@@ -59,7 +59,6 @@ create table if not exists multiple_choices (
     exercise_id uuid not null,
     index integer not null,
     is_matching_choice boolean default false,
-    is_left_choice boolean,
     choice varchar(255) not null,
     constraint exercise_id_fk foreign key (exercise_id)
         references exercises (id)
@@ -71,14 +70,23 @@ create table if not exists exercise_answers (
     id uuid not null primary key,
     exercise_id uuid not null,
     multiple_choice_id uuid,
-    answer_text varchar(255)
+    answer_text text,
+    constraint exercises_id_fk_ans foreign key (exercise_id)
+        references exercises (id)
+        on update no action
+        on delete no action,
+    constraint multiple_choices_id_fk_ans foreign key (multiple_choice_id)
+        references multiple_choices (id)
+        on update no action
+        on delete no action
 );
 
 create table if not exists answer_attempts (
     id uuid not null primary key,
     user_id uuid not null,
     exercise_id uuid not null,
-    user_answer varchar (255) not null,
+    user_answer varchar (255),
+    marks_awarded integer not null,
     status varchar (100) not null,
     constraint user_id_fk_attempts foreign key (user_id)
         references users (id)

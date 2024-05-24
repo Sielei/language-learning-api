@@ -1,1 +1,29 @@
-spring.application.name=language-learning-api
+spring:
+  application:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5434/mydatabase
+    username: myuser
+    password: secret
+    name: language-learning-api
+  mail:
+    default-encoding: UTF-8
+    host: smtp.gmail.com
+    port: 587
+    username: 'smtp@gmail.com'
+    password: 'xri76drahoptzi'
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            debug: true
+server:
+  port: 8088
+
+app-config:
+  jwt-secret: pYXQiOjEMsnVz5AYXJvbXMNjc2OTgyNTUzfQ
+  jwt-expiry-duration-in-minutes: 1440
+  password-reset-token-expiry-duration-in-days: 1

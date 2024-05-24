@@ -4,6 +4,7 @@ import com.hs.languagelearningapi.common.DTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface AnswerAttemptRepository extends JpaRepository<AnswerAttempt, UUID> {
@@ -13,4 +14,6 @@ public interface AnswerAttemptRepository extends JpaRepository<AnswerAttempt, UU
 
     @Query("select sum(a.marksAwarded) from AnswerAttempt a where a.userId = ?1 and a.exercise.lesson.id = ?2")
     Integer findCurrentUserScore(UUID userId, UUID lessonId);
+
+    Optional<AnswerAttempt> findByUserIdAndExerciseId(UUID userId, UUID exerciseId);
 }

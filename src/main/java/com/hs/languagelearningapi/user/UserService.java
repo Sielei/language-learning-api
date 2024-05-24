@@ -17,4 +17,8 @@ public interface UserService {
     DTO.UserDto findUserById(UUID userId);
 
     void updatePassword(DTO.UpdatePasswordCommand updatePasswordCommand);
+
+    DTO.RegisterUserResponse findById(UUID userId);
+
+    void updateUserDetails(UUID userId, DTO.UpdateUserRequest updateUserRequest);
 }

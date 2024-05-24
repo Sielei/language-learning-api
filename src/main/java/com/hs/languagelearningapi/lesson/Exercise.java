@@ -23,6 +23,7 @@ public class Exercise {
     @Column(columnDefinition = "TEXT")
     private String task;
     private Integer taskScore;
+    @Enumerated(EnumType.STRING)
     private DTO.TaskType taskType;
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "exercise")
     private List<MultipleChoice> multipleChoices = new ArrayList<>();

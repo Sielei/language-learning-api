@@ -45,10 +45,10 @@ class LessonController {
     @PreAuthorize("hasAuthority('TUTOR')")
     @GetMapping
     DTO.PagedCollection<DTO.LessonResponse> findAllLanguageLessons(
-            @RequestParam(name = "language", defaultValue = "All") String language,
+            @RequestParam(name = "languageId") UUID languageId,
             @RequestParam(name = "page", defaultValue = "1") int page,
             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize){
-        return lessonService.findAllLanguageLessons(language, page, pageSize);
+        return lessonService.findAllLanguageLessons(languageId, page, pageSize);
     }
 
     @Operation(summary = "Update language lesson", security = @SecurityRequirement(name = "bearerAuth"))
@@ -119,4 +119,27 @@ class LessonController {
                               @PathVariable("exerciseId") UUID exerciseId){
         lessonService.deleteLessonExercise(lessonId, exerciseId);
     }
+
+    @Operation(summary = "Get the next exercise for the lesson", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/{lessonId}/exercises/next")
+    DTO.PagedCollection<DTO.ExerciseResponse> getNextExercise(@PathVariable("lessonId") UUID lessonId,
+                                                              @RequestParam("page") int page){
+        return lessonService.findAllLessonExercises(lessonId, page, 1);
+    }
+
+    @Operation(summary = "Submit an answer to exercise task", security = @SecurityRequirement(name = "bearerAuth"))
+    @PostMapping("/{lessonId}/exercises/{exerciseId}/response")
+    DTO.ResponseFeedback submitAnswer(@PathVariable("lessonId") UUID lessonId, @PathVariable("exerciseId") UUID exerciseId,
+                                      @RequestAttribute("userId") UUID userId,
+                                      @RequestBody DTO.Answer answer){
+        return lessonService.submitExerciseAnswer(lessonId, exerciseId, userId, answer);
+    }
+
+    @Operation(summary = "Get lesson recommendation for current user", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/recommedations/{languageId}")
+    DTO.LessonResponse getLessonRecommendation(@PathVariable("languageId") UUID languageId,
+            @RequestAttribute("userId") UUID userId){
+        return lessonService.getRecommendation(userId, languageId);
+    }
+
 }
