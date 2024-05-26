@@ -23,6 +23,11 @@ Build docker image `mvn clean install -DskipTests`
 
 cd docker `docker-compose up`
 
+## API Documentation
+The API documentation is done using [Swagger](https://swagger.io/specification/).
+The system also supports [Redoc](http://localhost:8088/redoc) for API documentation
+![Redoc UI](/docs/redoc.png)
+
 ## Application Overview
 
 The system contains 2 main actors: 
@@ -318,9 +323,3 @@ The following json snippets shows how to structure the payload for creating an e
 
 To learn a new language, the user needs to have the LEANER role which is the default role for anyone who registers to use the system.
 
-
-
-
-
- The system also supports [Redoc](http://localhost:8088/redoc) for API documentation
-![Redoc UI](/docs/redoc.png)
