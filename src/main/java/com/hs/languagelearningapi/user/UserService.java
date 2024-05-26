@@ -21,4 +21,10 @@ public interface UserService {
     DTO.RegisterUserResponse findById(UUID userId);
 
     void updateUserDetails(UUID userId, DTO.UpdateUserRequest updateUserRequest);
+
+    DTO.PagedCollection<DTO.RegisterUserResponse> findAllUsers(int page, int pageSize);
+
+    DTO.PagedCollection<DTO.UserProgressDto> findUserProgress(UUID userId, int page, int pageSize);
+
+    DTO.PagedCollection<DTO.UserProgressDto> findOwnProgress(UUID userId, int page, int pageSize);
 }

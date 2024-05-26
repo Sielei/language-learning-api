@@ -13,7 +13,7 @@ public class DTO {
                                       @NotBlank(message = "Last name is required") String lastName,
                                       @Email(message = "Email should be valid") String email,
                                       @NotBlank(message = "Password is required") String password){}
-    public record RegisterUserResponse(UUID id, String name, String email){}
+    public record RegisterUserResponse(UUID id, String name, String email, Role role){}
     public enum Role{
         TUTOR, LEARNER
     }
@@ -68,5 +68,8 @@ public class DTO {
     }
     public record ResponseFeedback(String status, Integer score, Integer completedExercises,
                                    Integer pendingExercises, Integer totalScore){}
+
+    public record UserProgressDto(String language, String lesson, Integer attemptedExercises,
+                               Integer failedExercises, Integer userScore, Integer totalScore){}
 
 }

@@ -4,6 +4,7 @@ import com.hs.languagelearningapi.common.ApplicationConfigData;
 import com.hs.languagelearningapi.common.DTO;
 import com.hs.languagelearningapi.common.exception.UserAuthenticationException;
 import com.hs.languagelearningapi.common.exception.UserRegistrationException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,11 +18,14 @@ import java.util.UUID;
 class DefaultUserService implements UserService{
     private final UserRepository userRepository;
     private final PasswordResetRepository passwordResetRepository;
+    private final UserProgressPort userProgressPort;
     private final ApplicationConfigData applicationConfigData;
 
-    DefaultUserService(UserRepository userRepository, PasswordResetRepository passwordResetRepository, ApplicationConfigData applicationConfigData) {
+    DefaultUserService(UserRepository userRepository, PasswordResetRepository passwordResetRepository,
+                       UserProgressPort userProgressPort, ApplicationConfigData applicationConfigData) {
         this.userRepository = userRepository;
         this.passwordResetRepository = passwordResetRepository;
+        this.userProgressPort = userProgressPort;
         this.applicationConfigData = applicationConfigData;
     }
 
@@ -58,7 +62,7 @@ class DefaultUserService implements UserService{
     }
     private DTO.RegisterUserResponse mapUserToRegisterUserResponse(User user) {
         return new DTO.RegisterUserResponse(user.getId(), user.getFirstName() + " " + user.getLastName(),
-                user.getEmail());
+                user.getEmail(), user.getRole());
     }
 
     @Transactional(readOnly = true)
@@ -109,7 +113,7 @@ class DefaultUserService implements UserService{
     public DTO.RegisterUserResponse findById(UUID userId) {
         var userDto = findUserById(userId);
         return new DTO.RegisterUserResponse(userDto.id(), userDto.firstName() + " " +
-                userDto.lastName(), userDto.email());
+                userDto.lastName(), userDto.email(), userDto.role());
     }
 
     @Transactional
@@ -120,6 +124,36 @@ class DefaultUserService implements UserService{
         userToUpdate.setLastName(updateUserRequest.lastName());
         userToUpdate.setEmail(updateUserRequest.email());
         userRepository.save(userToUpdate);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public DTO.PagedCollection<DTO.RegisterUserResponse> findAllUsers(int page, int pageSize) {
+        var pageNo = page > 0 ? page - 1 : 0;
+        var pageable = PageRequest.of(pageNo, pageSize);
+        var usersPage = userRepository.findAll(pageable)
+                .map(user -> new DTO.RegisterUserResponse(user.getId(), user.getFirstName() + " " +
+                        user.getLastName(), user.getEmail(), user.getRole()));
+        return new DTO.PagedCollection<>(
+                usersPage.getContent(),
+                usersPage.getTotalElements(),
+                usersPage.getNumber() + 1,
+                usersPage.getTotalPages(),
+                usersPage.isFirst(),
+                usersPage.isLast(),
+                usersPage.hasNext(),
+                usersPage.hasPrevious()
+        );
+    }
+
+    @Override
+    public DTO.PagedCollection<DTO.UserProgressDto> findUserProgress(UUID userId, int page, int pageSize) {
+        return userProgressPort.findUserProgress(userId, page, pageSize);
+    }
+
+    @Override
+    public DTO.PagedCollection<DTO.UserProgressDto> findOwnProgress(UUID userId, int page, int pageSize) {
+        return userProgressPort.findUserProgress(userId, page, pageSize);
     }
 
     private DTO.UserDto mapUserToRegisterUserDto(User user) {

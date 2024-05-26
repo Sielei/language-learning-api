@@ -2,6 +2,8 @@ package com.hs.languagelearningapi.lesson;
 
 import com.hs.languagelearningapi.common.DTO;
 import com.hs.languagelearningapi.common.exception.ResourceNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -18,4 +20,5 @@ interface UserProgressRepository extends JpaRepository<UserProgress, UUID> {
     }
 
     List<UserProgress> findByUserId(UUID userId);
+    Page<UserProgress> findByUserId(UUID userId, PageRequest pageRequest);
 }
